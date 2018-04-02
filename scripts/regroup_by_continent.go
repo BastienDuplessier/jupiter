@@ -73,8 +73,6 @@ func ExtractJobs() []Job {
 		if len(rec) == 0 {
 			break
 		}
-
-		fmt.Println(rec)
 		jobs = append(jobs, RecToJob(rec))
 	}
 
