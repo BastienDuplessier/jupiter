@@ -1,0 +1,42 @@
+id,name,category_name
+17,Devops / Infrastructure,Tech
+24,Compta / Contrôle de Gestion,Admin
+38,Conseil Stratégie,Conseil
+18,Hardware,Tech
+39,Conseil Management/Orga,Conseil
+35,Styliste,Retail
+32,Wholesale,Retail
+37,Direction Artistique,Créa
+31,Vente,Retail
+19,Data Science,Tech
+20,SEO / SEM,Marketing / Comm'
+40,Conseil Digital,Conseil
+41,Conseil MOA / IT,Conseil
+8,Opérations,Business
+21,Recherche / R&D,Tech
+25,Juridique,Admin
+22,Télécom / Réseaux,Tech
+26,RH / Formation,Admin
+4,Community Management,Marketing / Comm'
+29,Evenementiel,Marketing / Comm'
+3,Communication / Création,Marketing / Comm'
+5,Conseil,Business
+7,Marketing,Marketing / Comm'
+27,Production audiovisuelle,Créa
+9,Logistique / Achats,Business
+10,Relation client / Support,Business
+13,Développement Backend,Tech
+14,Développement Frontend,Tech
+15,Développement Mobile,Tech
+16,Développement Fullstack,Tech
+23,Administration,Admin
+11,Design / UX / UI,Créa
+36,Modéliste,Retail
+42,Production/Fabrication,Retail
+1,Audit / Finance,Business
+2,BizDev / Vente,Business
+28,Graphisme / Illustration,Créa
+33,Merchandising,Retail
+30,Store Manager,Retail
+6,Journalisme / RP,Marketing / Comm'
+12,Gestion de Projet / Produit,Tech
