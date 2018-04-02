@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/csv"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -100,9 +101,30 @@ func ExtractProfessions() []Profession {
 	return profs
 }
 
+func ExtractCountries() []interface{} {
+	var countries []interface{}
+
+	files, err := ioutil.ReadDir("data/countries")
+	Check(err)
+
+	for _, file := range files {
+		byt, err := ioutil.ReadFile("data/countries/" + file.Name())
+		Check(err)
+		var dat map[string]interface{}
+
+		if err := json.Unmarshal(byt, &dat); err != nil {
+			panic(err)
+		}
+		countries = append(countries, dat)
+	}
+
+	return countries
+}
+
 func main() {
 	jobs := ExtractJobs()
 	professions := ExtractProfessions()
+	countries := ExtractCountries()
 
 	// Iterate through list and print its contents.
 	for i, job := range jobs {
@@ -113,4 +135,10 @@ func main() {
 	for i, prof := range professions {
 		fmt.Println(i, prof)
 	}
+
+	// Iterate through list and print its contents.
+	for i, country := range countries {
+		fmt.Println(i, country)
+	}
+
 }
