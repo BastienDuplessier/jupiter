@@ -53,6 +53,10 @@ func RecToJob(rec []string) Job {
 	return Job{rec[0], rec[1], rec[2], lat, lon}
 }
 
+func RecToProf(rec []string) Profession {
+	return Profession{rec[0], rec[1], rec[2]}
+}
+
 func ReadCsvLine(reader *csv.Reader) []string {
 	rec, err := reader.Read()
 	if err == io.EOF {
@@ -79,11 +83,34 @@ func ExtractJobs() []Job {
 	return jobs
 }
 
+func ExtractProfessions() []Profession {
+	var profs []Profession
+
+	r := ReadCsv("data/professions.csv")
+	r.Read()
+	for {
+		rec := ReadCsvLine(r)
+		if len(rec) == 0 {
+			break
+		}
+
+		profs = append(profs, RecToProf(rec))
+	}
+
+	return profs
+}
+
 func main() {
 	jobs := ExtractJobs()
+	professions := ExtractProfessions()
 
 	// Iterate through list and print its contents.
 	for i, job := range jobs {
-		fmt.Println("%q - %q", i, job)
+		fmt.Println(i, job)
+	}
+
+	// Iterate through list and print its contents.
+	for i, prof := range professions {
+		fmt.Println(i, prof)
 	}
 }
