@@ -53,16 +53,26 @@ func RecToJob(rec []string) Job {
 	return Job{rec[0], rec[1], rec[2], lat, lon}
 }
 
+func ReadCsvLine(reader *csv.Reader) []string {
+	rec, err := reader.Read()
+	if err == io.EOF {
+		var empty []string
+		return empty
+	}
+	Check(err)
+	return rec
+}
+
 func ExtractJobs() []Job {
 	var jobs []Job
 
 	r := ReadCsv("data/jobs.csv")
+	r.Read()
 	for {
-		rec, err := r.Read()
-		if err == io.EOF {
+		rec := ReadCsvLine(r)
+		if len(rec) == 0 {
 			break
 		}
-		Check(err)
 
 		fmt.Println(rec)
 		jobs = append(jobs, RecToJob(rec))
