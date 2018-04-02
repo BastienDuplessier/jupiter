@@ -39,15 +39,25 @@ func ParseFloat64(str string)float64 {
   }
 }
 
-func ExtractJobs()[]Job {  
-  var jobs []Job
-
-  dat, err := ioutil.ReadFile("data/jobs.csv")
+func ReadCsv(filename string)*csv.Reader {
+  dat, err := ioutil.ReadFile(filename)
   Check(err)
 
 	r := csv.NewReader(strings.NewReader(string(dat)))
 	r.Read() // Discard headers
+  return r
+}
 
+func RecToJob(rec []string)Job {
+    lat := ParseFloat64(rec[3])
+    lon := ParseFloat64(rec[4])
+    return Job{rec[0], rec[1], rec[2], lat, lon}
+}
+
+func ExtractJobs()[]Job {
+  var jobs []Job
+
+  r := ReadCsv("data/jobs.csv")
 	for {
 		rec, err := r.Read()
 		if err == io.EOF {
@@ -56,11 +66,7 @@ func ExtractJobs()[]Job {
     Check(err)
 
 		fmt.Println(rec)
-    
-    lat := ParseFloat64(rec[3])
-    lon := ParseFloat64(rec[4])
-    job := Job{rec[0], rec[1], rec[2], lat, lon}
-    jobs = append(jobs, job)
+    jobs = append(jobs, RecToJob(rec))
 	}
 
   return jobs
