@@ -31,10 +31,6 @@ defmodule Geolocation do
   end
 
 
-  @doc """
-    Parse a string and extract the coord as float
-    Handle errors by returning 0
-  """
   defp parse_latlon(str) do
     case Float.parse(str) do
       :error -> 0.0
