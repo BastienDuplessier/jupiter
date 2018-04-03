@@ -73,7 +73,6 @@ func ExtractJobs() []Job {
 	var jobs []Job
 
 	r := ReadCsv("data/jobs.csv")
-	r.Read()
 	for {
 		rec := ReadCsvLine(r)
 		if len(rec) == 0 {
@@ -89,7 +88,6 @@ func ExtractProfessions() []Profession {
 	var profs []Profession
 
 	r := ReadCsv("data/professions.csv")
-	r.Read()
 	for {
 		rec := ReadCsvLine(r)
 		if len(rec) == 0 {
