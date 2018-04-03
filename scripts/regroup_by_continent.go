@@ -4,9 +4,11 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
+	"github.com/olekukonko/tablewriter"
 	"io"
 	"io/ioutil"
 	"math"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -157,6 +159,94 @@ func FindContinent(lat float64, lon float64, countries []interface{}) string {
 	}
 }
 
+func BuildData(result map[Key]int, cont_res map[string]int, prof_res map[string]int) ([][]string, []string) {
+	var data [][]string
+	var header []string
+	var line []string
+	var prof_order []string
+	var cont_order []string
+	var total int
+
+	_ = result
+
+	// Define continent order
+	for cont, _ := range cont_res {
+		cont_order = append(cont_order, cont)
+	}
+
+	// Total of all offers
+	total = 0
+	for _, val := range cont_res {
+		total += val
+	}
+
+	// Header, professions names
+	header = append(header, "")
+	header = append(header, "TOTAL")
+
+	for prof, _ := range prof_res {
+		header = append(header, prof)
+		prof_order = append(prof_order, prof)
+	}
+
+	// Second line, professions totals
+	line = []string{}
+	line = append(line, "TOTAL")
+	line = append(line, strconv.Itoa(total))
+
+	for _, prof := range prof_order {
+		line = append(line, strconv.Itoa(prof_res[prof]))
+	}
+	data = append(data, line)
+
+	// Now, the rest of the lines, for for each continent
+	for _, cont := range cont_order {
+		line = []string{}
+		line = append(line, strings.ToUpper(cont))
+		line = append(line, strconv.Itoa(cont_res[cont]))
+		for _, prof := range prof_order {
+			key := Key{prof, cont}
+			line = append(line, strconv.Itoa(result[key]))
+		}
+		data = append(data, line)
+	}
+
+	return data, header
+}
+
+func ComputeTotByContinent(result map[Key]int) map[string]int {
+	var res map[string]int
+	res = make(map[string]int)
+
+	for key, nb := range result {
+		res[key.continent] += nb
+	}
+	return res
+}
+
+func ComputeTotByProf(result map[Key]int) map[string]int {
+	var res map[string]int
+	res = make(map[string]int)
+
+	for key, nb := range result {
+		res[key.profession] += nb
+	}
+	return res
+}
+
+func PrintResult(result map[Key]int) {
+	total_by_continent := ComputeTotByContinent(result)
+	fmt.Println(total_by_continent)
+	total_by_prof := ComputeTotByProf(result)
+	fmt.Println(total_by_prof)
+
+	data, header := BuildData(result, total_by_continent, total_by_prof)
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader(header)
+	table.AppendBulk(data) // Add Bulk Data
+	table.Render()
+}
+
 func main() {
 	jobs := ExtractJobs()
 	professions := ExtractProfessions()
@@ -177,5 +267,5 @@ func main() {
 		result[key] += 1
 	}
 
-	fmt.Println(result)
+	PrintResult(result)
 }
