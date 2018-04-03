@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"math"
 	"strconv"
 	"strings"
 )
@@ -121,6 +122,32 @@ func ExtractCountries() []interface{} {
 	return countries
 }
 
+func FindContinent(lat float64, lon float64, countries []interface{}) map[string]interface{} {
+	var res map[string]interface{}
+	dist := -1.0
+	for _, country := range countries {
+		country := country.(map[string]interface{})
+		mn_lon := country["MinLongitude"].(float64)
+		mx_lon := country["MaxLongitude"].(float64)
+		mn_lat := country["MinLatitude"].(float64)
+		mx_lat := country["MaxLatitude"].(float64)
+
+		lon_in := mn_lon <= lon && mx_lon >= lon
+		lat_in := mn_lat <= lat && mx_lat >= lat
+
+		if lon_in && lat_in {
+			clat := country["Latitude"].(float64)
+			clon := country["Longitude"].(float64)
+			cdist := math.Abs((clat - lat) + (clon - lon))
+			if dist == -1.0 || dist > cdist {
+				dist = cdist
+				res = country
+			}
+		}
+	}
+	return res
+}
+
 func main() {
 	jobs := ExtractJobs()
 	professions := ExtractProfessions()
@@ -139,6 +166,16 @@ func main() {
 	// Iterate through list and print its contents.
 	for i, country := range countries {
 		fmt.Println(i, country)
+	}
+
+	for _, job := range jobs {
+		lat := job.office_latitude
+		lon := job.office_longitude
+		fmt.Println(lat, lon)
+
+		country := FindContinent(lat, lon, countries)
+		fmt.Println(country["region"])
+		break
 	}
 
 }
