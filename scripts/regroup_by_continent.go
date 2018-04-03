@@ -170,6 +170,9 @@ func main() {
 		lon := job.office_longitude
 		continent := FindContinent(lat, lon, countries)
 		profession := professions[job.profession_id].name
+		if profession == "" {
+			profession = "Unknown"
+		}
 		key := Key{continent: continent, profession: profession}
 		result[key] += 1
 	}
