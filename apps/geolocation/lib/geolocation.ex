@@ -12,7 +12,7 @@ defmodule Geolocation do
       {lat, lon} = {job["office_latitude"], job["office_longitude"]}
       dist = Distance.GreatCircle.distance({latitude, longitude}, {lat, lon})
       dist < radius * 1000
-    end)
+    end) |> Enum.map(fn({_, job}) -> job end)
   end
                                 
   @doc """
