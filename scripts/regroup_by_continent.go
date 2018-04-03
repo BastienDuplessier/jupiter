@@ -25,6 +25,11 @@ type Profession struct {
 	category_name string
 }
 
+type Key struct {
+	profession string
+	continent  string
+}
+
 func Check(e error) {
 	if e != nil {
 		panic(e)
@@ -120,7 +125,7 @@ func ExtractCountries() []interface{} {
 	return countries
 }
 
-func FindContinent(lat float64, lon float64, countries []interface{}) map[string]interface{} {
+func FindContinent(lat float64, lon float64, countries []interface{}) string {
 	var res map[string]interface{}
 	dist := -1.0
 	for _, country := range countries {
@@ -143,7 +148,11 @@ func FindContinent(lat float64, lon float64, countries []interface{}) map[string
 			}
 		}
 	}
-	return res
+	if res != nil {
+		return res["region"].(string)
+	} else {
+		return "unknown"
+	}
 }
 
 func main() {
@@ -165,15 +174,16 @@ func main() {
 	for i, country := range countries {
 		fmt.Println(i, country)
 	}
+	var result map[Key]int
+	result = make(map[Key]int)
 
 	for _, job := range jobs {
 		lat := job.office_latitude
 		lon := job.office_longitude
-		fmt.Println(lat, lon)
-
-		country := FindContinent(lat, lon, countries)
-		fmt.Println(country["region"])
-		break
+		continent := FindContinent(lat, lon, countries)
+		key := Key{continent: continent, profession: "foo"}
+		result[key] += 1
 	}
 
+	fmt.Println(result)
 }
