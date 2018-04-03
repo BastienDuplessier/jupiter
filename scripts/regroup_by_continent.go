@@ -89,8 +89,9 @@ func ExtractJobs() []Job {
 	return jobs
 }
 
-func ExtractProfessions() []Profession {
-	var profs []Profession
+func ExtractProfessions() map[string]Profession {
+	var profs map[string]Profession
+	profs = make(map[string]Profession)
 
 	r := ReadCsv("data/professions.csv")
 	for {
@@ -99,7 +100,8 @@ func ExtractProfessions() []Profession {
 			break
 		}
 
-		profs = append(profs, RecToProf(rec))
+		prof := RecToProf(rec)
+		profs[prof.id] = prof
 	}
 
 	return profs
@@ -167,7 +169,8 @@ func main() {
 		lat := job.office_latitude
 		lon := job.office_longitude
 		continent := FindContinent(lat, lon, countries)
-		key := Key{continent: continent, profession: "foo"}
+		profession := professions[job.profession_id].name
+		key := Key{continent: continent, profession: profession}
 		result[key] += 1
 	}
 
