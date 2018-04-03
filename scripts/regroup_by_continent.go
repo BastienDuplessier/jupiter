@@ -160,20 +160,6 @@ func main() {
 	professions := ExtractProfessions()
 	countries := ExtractCountries()
 
-	// Iterate through list and print its contents.
-	for i, job := range jobs {
-		fmt.Println(i, job)
-	}
-
-	// Iterate through list and print its contents.
-	for i, prof := range professions {
-		fmt.Println(i, prof)
-	}
-
-	// Iterate through list and print its contents.
-	for i, country := range countries {
-		fmt.Println(i, country)
-	}
 	var result map[Key]int
 	result = make(map[Key]int)
 
